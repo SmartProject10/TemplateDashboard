@@ -1,10 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
 import Home from "./pages/pagesWeb/Home";
 import LayoutMain from "./components/layouts/LayoutMain";
-import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { LoginScreen } from "./pages/login/LoginScreen";
+import { SignupScreen } from "./pages/signup/SignupScreen";
+
+import "./assets/css/index.css";
+import { ProfileScreen } from "./pages/profile/ProfileScreen";
 
 // contexts
 // loaders
@@ -24,9 +29,19 @@ const router = createBrowserRouter([
         path: "/",
       },
       {
-        index: true,
+        index: false,
         element: <LoginScreen />,
         path: "/login",
+      },
+      {
+        index: false,
+        element: <SignupScreen />,
+        path: "/register",
+      },
+      {
+        index: false,
+        element: <ProfileScreen />,
+        path: "/profile",
       },
       // Otras rutas comentadas...
     ],
@@ -37,5 +52,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Toaster />
   </React.StrictMode>
 );
