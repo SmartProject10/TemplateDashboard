@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { LayoutLogin } from "../../components/layouts/LayoutLogin";
-import { ButtomSimple, SimpleInput, SpinnerSimple } from "../../components/ui";
+import { ButtomSimple, SimpleInput } from "../../components/ui";
 import { containsScript } from "../../utils/functions";
+import { authContext } from "../../components/context/Auth/AuthProvider";
 
 export const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,8 @@ export const SignupScreen = () => {
   const [password, setPassword] = useState("");
   const [verifyPassword, setverifyPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { authTab } = useContext(authContext);
 
   const navigate = useNavigate();
 
@@ -59,7 +62,7 @@ export const SignupScreen = () => {
 
   return (
     <>
-      <LayoutLogin title="Registrar Empresa">
+      <LayoutLogin title={authTab === 1 ? "Registrarse" : "Registrar Empresa"}>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <SimpleInput
             label="Email"

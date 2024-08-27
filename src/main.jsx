@@ -3,45 +3,61 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import Home from "./pages/pagesWeb/Home";
 import LayoutMain from "./components/layouts/LayoutMain";
 import { LoginScreen } from "./pages/login/LoginScreen";
 import { SignupScreen } from "./pages/signup/SignupScreen";
+import { ProfileScreen } from "./pages/profile/ProfileScreen";
+import { SystemAddScreen } from "./pages/systemAdd/SystemAddScreen";
+import { MySystemsScreen } from "./pages/mySystems/MySystemsScreen";
+import { AuthProvider } from "./components/context/Auth/AuthProvider";
+import { InvoicesScreen } from "./pages/invoices/InvoicesScreen";
+import { RegisterSystemScreen } from "./pages/registerSystem/RegisterSystemScreen";
 
 import "./assets/css/index.css";
-import { ProfileScreen } from "./pages/profile/ProfileScreen";
-
-// contexts
-// loaders
-
-// layout de rutas protegidas
-// import ProtectedRoutes from './components/protected/ProtectedRoutes';
-// import Us from './pages/pagesWeb/Us';
+import { SystemsProvider } from "./components/context/Systems/SystemsProvider";
+import { PrivateRoute, PublicRoute } from "./components/routes";
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <PublicRoute element={<LoginScreen />} />,
+  },
+  {
+    index: false,
+    element: <PublicRoute element={<SignupScreen />} />,
+    path: "/register",
+  },
+  {
     path: "/",
-    element: <LayoutMain />,
+    element: (
+      <PrivateRoute
+        element={
+          <SystemsProvider>
+            <LayoutMain />
+          </SystemsProvider>
+        }
+      />
+    ),
     children: [
       {
-        index: true,
-        element: <Home />,
-        path: "/",
+        element: <PrivateRoute element={<ProfileScreen />} />,
+        path: "profile",
       },
       {
-        index: false,
-        element: <LoginScreen />,
-        path: "/login",
+        element: <PrivateRoute element={<SystemAddScreen />} />,
+        path: "system-add",
       },
       {
-        index: false,
-        element: <SignupScreen />,
-        path: "/register",
+        element: <PrivateRoute element={<MySystemsScreen />} />,
+        path: "my-systems",
       },
       {
-        index: false,
-        element: <ProfileScreen />,
-        path: "/profile",
+        element: <PrivateRoute element={<InvoicesScreen />} />,
+        path: "invoices",
+      },
+      {
+        element: <PrivateRoute element={<RegisterSystemScreen />} />,
+        path: "register-system",
       },
       // Otras rutas comentadas...
     ],
@@ -51,7 +67,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
     <Toaster />
   </React.StrictMode>
 );

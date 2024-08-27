@@ -1,6 +1,11 @@
-export const SimpleInput = (props) => {
-  const { label, type, placeholder, value, name, onHandleChange } = props;
-
+export const SimpleInput = ({
+  label,
+  type,
+  placeholder,
+  value,
+  name,
+  onHandleChange,
+}) => {
   return (
     <>
       <div className="flex flex-col gap-1">

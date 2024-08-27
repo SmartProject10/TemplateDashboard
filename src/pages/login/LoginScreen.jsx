@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { ButtomSimple, SimpleInput } from "../../components/ui";
+import { ButtomSimple, GoogleButton, SimpleInput } from "../../components/ui";
 import { LayoutLogin } from "../../components/layouts/LayoutLogin";
 import { containsScript } from "../../utils/functions";
+import { authContext } from "../../components/context/Auth/AuthProvider";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { handleLogin } = useContext(authContext);
 
   const navigate = useNavigate();
 
@@ -32,11 +35,23 @@ export const LoginScreen = () => {
       }
 
       // Aquí se debe hacer la petición al servidor para iniciar sesión
+      const response = await handleLogin(email, password);
+
+      if (!response) {
+        toast.error("Ocurrió un error al iniciar sesión");
+        setLoading(false);
+        return;
+      }
 
       toast.success("Inicio de sesión exitoso");
       setLoading(false);
-      navigate("/");
+      navigate("/system-add");
     } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        setLoading(false);
+        return;
+      }
       toast.error("Ocurrió un error al iniciar sesión");
       setLoading(false);
     }
@@ -45,44 +60,47 @@ export const LoginScreen = () => {
   return (
     <>
       <LayoutLogin title="Iniciar sesión">
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <SimpleInput
-            label="Email"
-            type="email"
-            name="email"
-            placeholder="Ingrese email"
-            value={email}
-            onHandleChange={setEmail}
-          />
-          <SimpleInput
-            label="Contraseña"
-            type="password"
-            name="password"
-            placeholder="******"
-            value={password}
-            onHandleChange={setPassword}
-          />
+        <div className="flex flex-col gap-2">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <SimpleInput
+              label="Email"
+              type="email"
+              name="email"
+              placeholder="Ingrese email"
+              value={email}
+              onHandleChange={setEmail}
+            />
+            <SimpleInput
+              label="Contraseña"
+              type="password"
+              name="password"
+              placeholder="******"
+              value={password}
+              onHandleChange={setPassword}
+            />
 
-          <div className="flex flex-row justify-between items-center">
-            <div className="flex flex-row justify-start items-center gap-2">
-              <input type="checkbox" name="remember" id="remember" />
-              <label htmlFor="remember" className="text-gray-500">
-                Recordar
-              </label>
+            <div className="flex flex-row justify-between items-center">
+              <div className="flex flex-row justify-start items-center gap-2">
+                <input type="checkbox" name="remember" id="remember" />
+                <label htmlFor="remember" className="text-gray-500">
+                  Recordar
+                </label>
+              </div>
+
+              <a href="#" className="text-blue-800 text-sm">
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
 
-            <a href="#" className="text-blue-800 text-sm">
-              ¿Olvidaste tu contraseña?
-            </a>
-          </div>
-
-          <ButtomSimple
-            type="submit"
-            text="Iniciar sesión"
-            disabled={loading}
-            loading={loading}
-          />
-        </form>
+            <ButtomSimple
+              type="submit"
+              text="Iniciar sesión"
+              disabled={loading}
+              loading={loading}
+            />
+          </form>
+          <GoogleButton />
+        </div>
       </LayoutLogin>
     </>
   );
