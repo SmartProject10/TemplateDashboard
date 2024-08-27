@@ -26,15 +26,8 @@ export const DialogSimple = ({ isOpen, title, onHandleClose, children }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="max-w-lg space-y-4 bg-white p-4 rounded-lg"
+                className="max-w-lg space-y-4 bg-white p-4 rounded-xl"
               >
-                <button
-                  onClick={onHandleClose}
-                  className="absolute right-[32.5rem]"
-                >
-                  <IoIosClose size={20} />
-                </button>
-
                 <DialogTitle className="text-lg font-bold">{title}</DialogTitle>
 
                 {children}

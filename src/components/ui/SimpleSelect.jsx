@@ -1,13 +1,9 @@
-import { RiErrorWarningFill } from "react-icons/ri";
-
-export const SimpleInput = ({
+export const SimpleSelect = ({
   label,
-  type,
   placeholder,
   value,
   name,
   required = false,
-  info = false,
   onHandleChange,
 }) => {
   return (
@@ -18,18 +14,21 @@ export const SimpleInput = ({
           htmlFor={name}
         >
           {label} {required && <span className="text-red-500">*</span>}{" "}
-          {info && <RiErrorWarningFill className="text-gray-600" size={15} />}
         </label>
 
-        <input
-          type={type}
+        <select
           name={name}
           value={value}
-          required={required}
           onChange={({ target }) => onHandleChange(target.value)}
-          placeholder={placeholder}
+          required
           className="rounded-md border border-gray-200 p-2"
-        />
+        >
+          <option disabled selected>
+            {placeholder}
+          </option>
+          <option value="licencia">Licencia</option>
+          <option value="prueba">Prueba</option>
+        </select>
       </div>
     </>
   );

@@ -12,6 +12,7 @@ export const SystemsProvider = ({ children }) => {
   const [checkedSystems, setCheckedSystems] = useState({});
   const [loadingSystems, setLoadingSystems] = useState(false);
   const [loadingBuy, setLoadingBuy] = useState(false);
+  const [showRecordModal, setShowRecordModal] = useState(false);
 
   const [state, dispatch] = useReducer(systemsReducer, initStateSystem);
 
@@ -19,6 +20,8 @@ export const SystemsProvider = ({ children }) => {
 
   const handleSelectedCountry = (country) =>
     dispatch({ type: "SET_COUNTRY", payload: country });
+
+  const handleChangeRecordModal = () => setShowRecordModal((prev) => !prev);
 
   const handleGetSystems = async () => {
     try {
@@ -55,11 +58,21 @@ export const SystemsProvider = ({ children }) => {
     }));
 
     setTimeout(() => {
-      dispatch({ type: "SET_SELECTED_SYSTEMS", payload: system });
-      toast.success("Compra realizada con exito");
       setLoadingBuy(false);
+
+      toast.success("Compra realizada con exito");
+
+      dispatch({ type: "SET_SELECTED_SYSTEMS", payload: system });
+      dispatch({ type: "SET_COUNTRY", payload: "" });
+
+      setCheckedSystems({});
+
       navigate("/my-systems");
     }, 2000);
+  };
+
+  const handleRegisterSystem = (systemData) => {
+    console.log("systemData", systemData);
   };
 
   const isosMemo = useMemo(() => {
@@ -90,9 +103,12 @@ export const SystemsProvider = ({ children }) => {
         selectedSystems: state.selectedSystems,
         checkedSystems,
         selectedCountry: state.country,
+        showRecordModal,
         handleSelectedCountry,
         handleSystemBuy,
         handleSystemCheckboxChange,
+        handleChangeRecordModal,
+        handleRegisterSystem,
       }}
     >
       {children}

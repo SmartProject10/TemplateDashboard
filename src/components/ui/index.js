@@ -13,3 +13,5 @@ export * from "./SimpleLinkActive";
 export * from "./MainTable";
 export * from "./GeneralOvalLoading";
 export * from "./TitleWithParagraph";
+export * from "./ButtonWithIcon";
+export * from "./SimpleSelect";
